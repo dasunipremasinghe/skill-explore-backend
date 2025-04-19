@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/learning-plans")
@@ -39,9 +40,11 @@ public class LearningPlanController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlan(@PathVariable String id) {
+    public ResponseEntity<?> deletePlan(@PathVariable String id) {
         boolean deleted = service.deletePlan(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        return deleted
+                ? ResponseEntity.ok().body(Map.of("message", "Deleted successfully"))
+                : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/archive/{id}")

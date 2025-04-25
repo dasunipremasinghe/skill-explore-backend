@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/learning-plans")
@@ -21,6 +20,11 @@ public class LearningPlanController {
         return ResponseEntity.ok(service.createPlan(plan));
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<LearningPlan>> getPlansByUser(@PathVariable String userId) {
+        return ResponseEntity.ok(service.getPlansByUser(userId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<LearningPlan> getPlanById(@PathVariable String id) {
         return service.getPlanById(id)
@@ -28,23 +32,20 @@ public class LearningPlanController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<LearningPlan>> getPlansByUser(@PathVariable String userId) {
-        return ResponseEntity.ok(service.getPlansByUser(userId));
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<LearningPlan> updatePlan(@PathVariable String id, @RequestBody LearningPlan updatedPlan) {
         LearningPlan updated = service.updatePlan(id, updatedPlan);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePlan(@PathVariable String id) {
+    public ResponseEntity<Void> deletePlan(@PathVariable String id) {
         boolean deleted = service.deletePlan(id);
-        return deleted
-                ? ResponseEntity.ok().body(Map.of("message", "Deleted successfully"))
-                : ResponseEntity.notFound().build();
+        return deleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/archive/{id}")
@@ -55,8 +56,6 @@ public class LearningPlanController {
 
     @GetMapping("/search")
     public ResponseEntity<List<LearningPlan>> searchPlans(@RequestParam("q") String query) {
-        List<LearningPlan> results = service.searchPlans(query);
-        return ResponseEntity.ok(results);
+        return ResponseEntity.ok(service.searchPlans(query));
     }
-
 }

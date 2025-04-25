@@ -46,7 +46,7 @@ public class LearningPlanService {
 
     public LearningPlan archivePlan(String id) {
         return repository.findById(id).map(plan -> {
-            plan.setArchived(true);
+            plan.setArchived(!plan.isArchived()); // Toggle instead of hardcoding
             return repository.save(plan);
         }).orElse(null);
     }

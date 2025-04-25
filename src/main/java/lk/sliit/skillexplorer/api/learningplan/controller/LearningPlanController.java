@@ -52,4 +52,11 @@ public class LearningPlanController {
         LearningPlan archived = service.archivePlan(id);
         return archived != null ? ResponseEntity.ok(archived) : ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<LearningPlan>> searchPlans(@RequestParam("q") String query) {
+        List<LearningPlan> results = service.searchPlans(query);
+        return ResponseEntity.ok(results);
+    }
+
 }

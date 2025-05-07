@@ -1,4 +1,5 @@
-package com.example.demo.model;
+package lk.sliit.skillexplorer.api.learningprogress.model;
+
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

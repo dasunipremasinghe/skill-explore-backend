@@ -1,6 +1,6 @@
-package com.example.demo.repository;
+package lk.sliit.skillexplorer.api.learningprogress.repository;
 
-import com.example.demo.model.ProgressUpdate;
+import lk.sliit.skillexplorer.api.learningprogress.model.ProgressUpdate;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

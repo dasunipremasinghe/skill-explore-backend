@@ -3,6 +3,7 @@ package lk.sliit.skillexplorer.api.learningplan.controller;
 import lk.sliit.skillexplorer.api.learningplan.model.UserLearningProgress;
 import lk.sliit.skillexplorer.api.learningplan.service.UserLearningProgressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +17,12 @@ public class UserLearningProgressController {
     private UserLearningProgressService progressService;
 
     @GetMapping("/{userId}/{planId}")
-    public Optional<UserLearningProgress> getProgress(@PathVariable String userId, @PathVariable String planId) {
-        return progressService.getProgress(userId, planId);
+    public ResponseEntity<UserLearningProgress> getProgress(
+            @PathVariable String userId,
+            @PathVariable String planId) {
+        return progressService.getProgress(userId, planId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{userId}")

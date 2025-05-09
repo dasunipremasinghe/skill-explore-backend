@@ -1,6 +1,7 @@
 package lk.sliit.skillexplorer.api.learningplan.controller;
 
 import lk.sliit.skillexplorer.api.learningplan.model.UserLearningProgress;
+import lk.sliit.skillexplorer.api.learningplan.repository.UserLearningProgressRepository;
 import lk.sliit.skillexplorer.api.learningplan.service.UserLearningProgressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,9 @@ public class UserLearningProgressController {
 
     @Autowired
     private UserLearningProgressService progressService;
+    @Autowired
+    private UserLearningProgressRepository progressRepository;
+
 
     @GetMapping("/{userId}/{planId}")
     public ResponseEntity<UserLearningProgress> getProgress(
@@ -39,4 +43,11 @@ public class UserLearningProgressController {
     public void deleteProgress(@PathVariable String id) {
         progressService.deleteProgress(id);
     }
+
+    @DeleteMapping("/{userId}/{planId}")
+    public ResponseEntity<Void> deleteUserProgress(@PathVariable String userId, @PathVariable String planId) {
+        progressRepository.deleteByUserIdAndLearningPlanId(userId, planId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

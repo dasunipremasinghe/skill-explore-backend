@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface UserLearningProgressRepository extends MongoRepository<UserLearningProgress, String> {
     Optional<UserLearningProgress> findByUserIdAndLearningPlanId(String userId, String learningPlanId);
     List<UserLearningProgress> findAllByUserId(String userId);
+    void deleteByUserIdAndLearningPlanId(String userId, String learningPlanId);
 }
 

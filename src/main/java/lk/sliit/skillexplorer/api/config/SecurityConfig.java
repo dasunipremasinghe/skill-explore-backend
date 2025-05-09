@@ -3,6 +3,7 @@ package lk.sliit.skillexplorer.api.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,13 +22,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/public/**").permitAll()
                 .requestMatchers("/api/auth/google").permitAll()
-                .requestMatchers("/api/learning-plans/search").permitAll() 
+                .requestMatchers("/api/learning-plans/search").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt());
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                );
 
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -40,6 +44,13 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setPrincipalClaimName("email");  // ✅ use the "email" claim from the Google token
+        return converter;
     }
 }
 
